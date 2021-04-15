@@ -1,1 +1,1 @@
-# TextViewer-Win-CSharp
+# TextViewer for Windows
