@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TextViewer"
         mc:Ignorable="d"
-        Title="TextViewer" Height="450" Width="800">
+        Title="TextViewer" Height="450" Width="800" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -27,7 +27,21 @@
 
             <Label Grid.Row="0" Grid.Column="0">JSON Path</Label>
             <ComboBox Name="comboBoxJsonPath" Grid.Row="0" Grid.Column="1" IsEditable="True" LostFocus="ComboBoxJsonPath_LostFocus">
-                
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="20" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="{Binding}" />
+                            <Button Grid.Column="2" Content="Delete"
+                                    Tag="{Binding}" Click="ButtonDeleteJsonPath_Click" />
+                        </Grid>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
             </ComboBox>
             
             <TextBox Name="textBoxPlain" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="3" VerticalAlignment="Stretch"
