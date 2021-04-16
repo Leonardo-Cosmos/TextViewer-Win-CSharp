@@ -36,6 +36,29 @@ namespace TextViewer
 
             comboBoxJsonPath.ItemsSource = jsonPaths;
         }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            setting = SettingSerializer.Load() ?? new TextViewerSetting();
+
+            var jsonPathsSetting = setting?.JsonText?.JsonPaths ?? new List<string>(0);
+            jsonPathsSetting.ForEach(jsonPath => jsonPaths.Add(jsonPath));
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            var jsonTextSetting = setting.JsonText ??= new JsonTextSetting();
+            var jsonPathsSetting = jsonTextSetting.JsonPaths ??= new List<string>();
+            jsonPathsSetting.AddRange(jsonPaths);
+
+            SettingSerializer.Save(setting);
+        }
+
+        private void ButtonDeleteJsonPath_Click(object sender, RoutedEventArgs e)
+        {
+            var self = sender as Button;
+            var jsonPath = self.Tag as string;
+            jsonPaths.Remove(jsonPath);
+        }
 
         private void TextBoxPlain_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -99,29 +122,12 @@ namespace TextViewer
                 textBoxPlain.BorderBrush = Brushes.Red;
             }
 
+            var index = jsonPaths.IndexOf(jsonPath);
+            if (index > -1)
+            {
+                jsonPaths.RemoveAt(index);
+            }
             jsonPaths.Insert(0, jsonPath);
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            setting = SettingSerializer.Load() ?? new TextViewerSetting();
-
-            var jsonPathsSetting = setting?.JsonText?.JsonPaths ?? new List<string>(0);
-            jsonPathsSetting.ForEach(jsonPath => jsonPaths.Add(jsonPath));
-        }
-
-        private void Window_Closing(object sender, CancelEventArgs e)
-        {
-            var jsonTextSetting = setting.JsonText ??= new JsonTextSetting();
-            var jsonPathsSetting = jsonTextSetting.JsonPaths ??= new List<string>();
-            jsonPathsSetting.AddRange(jsonPaths);
-
-            SettingSerializer.Save(setting);
-        }
-
-        private void ButtonDeleteJsonPath_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }
