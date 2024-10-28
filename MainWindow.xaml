@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TextViewer"
         mc:Ignorable="d"
-        Title="TextViewer" Height="450" Width="800" Loaded="Window_Loaded" Closing="Window_Closing">
+        Title="{StaticResource MainWindowTitle}" Height="450" Width="800" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -25,7 +25,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Row="0" Grid.Column="0">JSON Path</Label>
+            <Label Grid.Row="0" Grid.Column="0" Content="{StaticResource JsonPath}" />
             <ComboBox Name="comboBoxJsonPath" Grid.Row="0" Grid.Column="1" IsEditable="True" LostFocus="ComboBoxJsonPath_LostFocus">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
