@@ -6,7 +6,6 @@ namespace TextViewer.Settings
 {
     class JsonTextSetting
     {
-
-        public List<string> JsonPaths { get; set; }
+        public required List<string> JsonPaths { get; set; }
     }
 }

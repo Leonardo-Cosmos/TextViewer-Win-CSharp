@@ -28,7 +28,7 @@ namespace TextViewer.Settings
             }
         }
 
-        public static TextViewerSetting Load()
+        public static TextViewerSetting? Load()
         {
             string json;
             try

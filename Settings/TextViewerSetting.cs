@@ -4,7 +4,6 @@ namespace TextViewer.Settings
 {
     class TextViewerSetting
     {
-
-        public JsonTextSetting JsonText { get; set; }
+        public required JsonTextSetting JsonText { get; set; }
     }
 }

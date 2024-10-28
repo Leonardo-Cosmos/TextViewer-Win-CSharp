@@ -26,7 +26,7 @@ namespace TextViewer
     /// </summary>
     public partial class MainWindow : Window
     {
-        private TextViewerSetting setting;
+        private TextViewerSetting? setting;
 
         private ObservableCollection<string> jsonPaths = new ObservableCollection<string>();
 
@@ -38,7 +38,13 @@ namespace TextViewer
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            setting = SettingSerializer.Load() ?? new TextViewerSetting();
+            setting = SettingSerializer.Load() ?? new TextViewerSetting()
+            {
+                JsonText = new JsonTextSetting()
+                {
+                    JsonPaths = []
+                }
+            };
 
             var jsonPathsSetting = setting?.JsonText?.JsonPaths ?? new List<string>(0);
             jsonPathsSetting.ForEach(jsonPath => jsonPaths.Add(jsonPath));
@@ -46,8 +52,8 @@ namespace TextViewer
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            var jsonTextSetting = setting.JsonText ??= new JsonTextSetting();
-            var jsonPathsSetting = jsonTextSetting.JsonPaths ??= new List<string>();
+            var jsonTextSetting = setting!.JsonText;
+            var jsonPathsSetting = jsonTextSetting.JsonPaths;
             jsonPathsSetting.AddRange(jsonPaths);
 
             SettingSerializer.Save(setting);
@@ -55,9 +61,15 @@ namespace TextViewer
 
         private void ButtonDeleteJsonPath_Click(object sender, RoutedEventArgs e)
         {
-            var self = sender as Button;
-            var jsonPath = self.Tag as string;
-            jsonPaths.Remove(jsonPath);
+            if (sender is not Button self)
+            {
+                return;
+            }
+
+            if (self.Tag is string jsonPath)
+            {
+                jsonPaths.Remove(jsonPath);
+            }
         }
 
         private void TextBoxPlain_TextChanged(object sender, TextChangedEventArgs e)
@@ -108,9 +120,9 @@ namespace TextViewer
                 object currentElement = dict;
                 foreach (var jsonPathPropName in jsonPathPropertyNames)
                 {
-                    if (currentElement is Dictionary<string, object>)
+                    if (currentElement is Dictionary<string, object> dictElement)
                     {
-                        currentElement = (currentElement as Dictionary<string, object>)[jsonPathPropName];
+                        currentElement = dictElement[jsonPathPropName];
                     }
                 }
 
